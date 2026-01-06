@@ -28,7 +28,10 @@ export const medicines = [
     name: "Paracetamol 500mg",
     description: "Fast relief from fever & mild pain. 10 tablets.",
     imageUrl: pillSvg("Paracetamol 500mg"),
-    price: 300,
+    // Base price is still treated as USD across the app for calculations, but this product
+    // must show ₹300 as the primary displayed price regardless of the global USD→INR rate.
+    price: 3.49,
+    displayPriceInr: 300,
     availability: "In Stock",
     featured: true
   },

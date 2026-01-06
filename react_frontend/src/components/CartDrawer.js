@@ -3,6 +3,7 @@ import { useCart } from "../context/CartContext";
 import Button from "./Button";
 import { useCurrency } from "../context/CurrencyContext";
 import { formatInr, formatUsd, usdToInr } from "../utils/currency";
+import { getLinePrices } from "../utils/pricing";
 
 // PUBLIC_INTERFACE
 export default function CartDrawer({ isOpen, onClose }) {
@@ -60,9 +61,7 @@ export default function CartDrawer({ isOpen, onClose }) {
             </div>
           ) : (
             cartItems.map(({ product, qty }) => {
-              const lineUsd = product.price * qty;
-              const lineInr = usdToInr(lineUsd, rate);
-              const eachInr = usdToInr(product.price, rate);
+              const { eachInr, eachUsd, lineInr, lineUsd } = getLinePrices({ product, qty, rate });
 
               return (
                 <div className="cartItem" key={product.id}>

@@ -3,7 +3,8 @@ import Badge from "./Badge";
 import Button from "./Button";
 import { useCart } from "../context/CartContext";
 import { useCurrency } from "../context/CurrencyContext";
-import { formatInr, formatUsd, usdToInr } from "../utils/currency";
+import { formatInr, formatUsd } from "../utils/currency";
+import { getPrimaryInrPrice, getSecondaryUsdPrice } from "../utils/pricing";
 
 // PUBLIC_INTERFACE
 export default function ProductCard({ product }) {
@@ -20,7 +21,8 @@ export default function ProductCard({ product }) {
         ? "error"
         : "neutral";
 
-  const inrPrice = usdToInr(product.price, rate);
+  const inrPrice = getPrimaryInrPrice(product, rate);
+  const usdPrice = getSecondaryUsdPrice(product, rate);
 
   return (
     <article className="card">
@@ -40,7 +42,7 @@ export default function ProductCard({ product }) {
           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
             <div className="price">{formatInr(inrPrice)}</div>
             <div className="p" style={{ fontSize: 12 }}>
-              ({formatUsd(product.price)} USD)
+              ({formatUsd(usdPrice)} USD)
             </div>
           </div>
 
