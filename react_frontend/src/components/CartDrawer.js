@@ -1,19 +1,24 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import Button from "./Button";
 import { useCurrency } from "../context/CurrencyContext";
 import { formatInr, formatUsd, usdToInr } from "../utils/currency";
 import { getLinePrices } from "../utils/pricing";
 import { FALLBACK_MEDICINE_IMAGE } from "../data/medicines";
+import { createOrder } from "../utils/orderService";
 
 // PUBLIC_INTERFACE
 export default function CartDrawer({ isOpen, onClose }) {
   /** Cart sidebar/drawer accessible globally. */
   const { cartItems, subtotal, increment, decrement, removeItem, clear } = useCart();
   const { rate } = useCurrency();
+  const navigate = useNavigate();
 
   const drawerRef = useRef(null);
   const closeBtnRef = useRef(null);
+
+  const [toast, setToast] = useState(null);
 
   const subtotalInr = useMemo(() => usdToInr(subtotal, rate), [subtotal, rate]);
   const hasItems = cartItems.length > 0;
@@ -32,6 +37,37 @@ export default function CartDrawer({ isOpen, onClose }) {
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!toast) return undefined;
+    const t = window.setTimeout(() => setToast(null), 3500);
+    return () => window.clearTimeout(t);
+  }, [toast]);
+
+  const placeOrder = () => {
+    if (!hasItems) return;
+
+    const order = createOrder(cartItems, {
+      // Keep USD base subtotal and computed INR subtotal for consistent summary display.
+      subtotalUsd: subtotal,
+      subtotalInr,
+      rate
+    });
+
+    clear();
+
+    // Lightweight non-blocking confirmation message (inline toast).
+    setToast({
+      kind: "success",
+      message: `Order placed: ${order.orderId}`
+    });
+
+    // Close the drawer so the tracking page is visible immediately.
+    onClose?.();
+
+    // Navigate to tracking page with orderId.
+    navigate(`/track?orderId=${encodeURIComponent(order.orderId)}`);
+  };
 
   return (
     <div
@@ -64,6 +100,26 @@ export default function CartDrawer({ isOpen, onClose }) {
         </div>
 
         <div className="drawerBody">
+          {toast ? (
+            <div
+              className="surface"
+              role="status"
+              aria-live="polite"
+              style={{
+                padding: 12,
+                marginBottom: 12,
+                borderRadius: 16,
+                borderColor: "rgba(245, 158, 11, 0.35)",
+                background: "rgba(245, 158, 11, 0.10)"
+              }}
+            >
+              <strong style={{ display: "block", marginBottom: 2 }}>Success</strong>
+              <div className="p" style={{ margin: 0 }}>
+                {toast.message}
+              </div>
+            </div>
+          ) : null}
+
           {cartItems.length === 0 ? (
             <div className="surface gradientHero" style={{ padding: 16 }}>
               <p className="p" style={{ marginBottom: 10 }}>
@@ -158,10 +214,7 @@ export default function CartDrawer({ isOpen, onClose }) {
             <Button
               variant="primary"
               type="button"
-              onClick={() => {
-                if (!hasItems) return;
-                window.alert("Order placement is not implemented yet (mock UI).");
-              }}
+              onClick={placeOrder}
               disabled={!hasItems}
               aria-label="Place order"
             >
