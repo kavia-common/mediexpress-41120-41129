@@ -13,8 +13,12 @@ function getProductImageSrc(product) {
 }
 
 // PUBLIC_INTERFACE
-export default function ProductCard({ product }) {
-  /** Product listing card with image, description, availability, and add-to-cart. */
+export default function ProductCard({ product, onAddedToCart }) {
+  /**
+   * Product listing card.
+   * UX: clicking the card adds to cart (when available) and opens the cart drawer.
+   * Accessibility: card is keyboard-activatable via Enter/Space.
+   */
   const { addItem } = useCart();
   const { rate } = useCurrency();
 
@@ -33,8 +37,28 @@ export default function ProductCard({ product }) {
   const initialSrc = useMemo(() => getProductImageSrc(product), [product]);
   const [imgSrc, setImgSrc] = useState(initialSrc);
 
+  const addAndOpenCart = () => {
+    if (!isAvailable) return;
+    addItem(product);
+    onAddedToCart?.();
+  };
+
   return (
-    <article className="card">
+    <article
+      className="card"
+      role="button"
+      tabIndex={isAvailable ? 0 : -1}
+      aria-disabled={!isAvailable}
+      aria-label={isAvailable ? `Add ${product.name} to cart` : `${product.name} unavailable`}
+      onClick={() => addAndOpenCart()}
+      onKeyDown={(e) => {
+        // Activate on Enter/Space, like a button.
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          addAndOpenCart();
+        }
+      }}
+    >
       <div className="cardMedia" aria-label={`${product.name} image`}>
         <img
           src={imgSrc}
@@ -66,7 +90,14 @@ export default function ProductCard({ product }) {
             type="button"
             disabled={!isAvailable}
             aria-disabled={!isAvailable}
-            onClick={() => addItem(product)}
+            aria-label={isAvailable ? `Add ${product.name} to cart` : `${product.name} unavailable`}
+            onClick={(e) => {
+              // Prevent the article click handler from firing twice.
+              e.stopPropagation();
+              addAndOpenCart();
+            }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.stopPropagation()}
           >
             {isAvailable ? "Add to cart" : "Unavailable"}
           </Button>

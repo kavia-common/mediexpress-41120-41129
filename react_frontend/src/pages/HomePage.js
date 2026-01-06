@@ -7,7 +7,7 @@ import { useCurrency } from "../context/CurrencyContext";
 import { formatInr, formatUsd, usdToInr } from "../utils/currency";
 
 // PUBLIC_INTERFACE
-export default function HomePage({ onCtaBrowse }) {
+export default function HomePage({ onCtaBrowse, onAddToCartOpenDrawer }) {
   /** Homepage with hero, featured medicines and quick value props. */
   const featured = useMemo(() => medicines.filter((m) => m.featured).slice(0, 4), []);
   const { rate, setRate } = useCurrency();
@@ -109,7 +109,7 @@ export default function HomePage({ onCtaBrowse }) {
 
           <div className="grid gridCols4">
             {featured.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} onAddedToCart={onAddToCartOpenDrawer} />
             ))}
           </div>
         </div>

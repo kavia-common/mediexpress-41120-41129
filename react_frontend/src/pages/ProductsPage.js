@@ -4,7 +4,7 @@ import ProductCard from "../components/ProductCard";
 import Badge from "../components/Badge";
 
 // PUBLIC_INTERFACE
-export default function ProductsPage({ externalQuery = "" }) {
+export default function ProductsPage({ externalQuery = "", onAddToCartOpenDrawer }) {
   /** Product listing page with name search + availability filter. */
   const [query, setQuery] = useState("");
   const [availability, setAvailability] = useState("All");
@@ -96,7 +96,7 @@ export default function ProductsPage({ externalQuery = "" }) {
         ) : (
           <div className="grid gridCols4">
             {filtered.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} onAddedToCart={onAddToCartOpenDrawer} />
             ))}
           </div>
         )}

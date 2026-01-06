@@ -58,8 +58,19 @@ function AppShell() {
 
       <main id="main" className="appMain" role="main">
         <Routes>
-          <Route path="/" element={<HomePage onCtaBrowse={() => navigate("/products")} />} />
-          <Route path="/products" element={<ProductsPage externalQuery={navQuery} />} />
+          <Route
+            path="/"
+            element={
+              <HomePage
+                onCtaBrowse={() => navigate("/products")}
+                onAddToCartOpenDrawer={() => setIsCartOpen(true)}
+              />
+            }
+          />
+          <Route
+            path="/products"
+            element={<ProductsPage externalQuery={navQuery} onAddToCartOpenDrawer={() => setIsCartOpen(true)} />}
+          />
           <Route path="/track" element={<OrderTrackingPage />} />
           <Route path="/home" element={<Navigate to="/" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />

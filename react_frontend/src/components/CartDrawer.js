@@ -11,15 +11,19 @@ export default function CartDrawer({ isOpen, onClose }) {
   /** Cart sidebar/drawer accessible globally. */
   const { cartItems, subtotal, increment, decrement, removeItem, clear } = useCart();
   const { rate } = useCurrency();
+
+  const drawerRef = useRef(null);
   const closeBtnRef = useRef(null);
 
   const subtotalInr = useMemo(() => usdToInr(subtotal, rate), [subtotal, rate]);
+  const hasItems = cartItems.length > 0;
 
   useEffect(() => {
     if (!isOpen) return;
 
-    // Focus management: focus close button when opening.
-    closeBtnRef.current?.focus();
+    // Focus management: focus the drawer itself (dialog), so screen readers announce it.
+    // Then, users can tab to the close button and controls naturally.
+    drawerRef.current?.focus();
 
     const onKeyDown = (e) => {
       if (e.key === "Escape") onClose?.();
@@ -37,7 +41,14 @@ export default function CartDrawer({ isOpen, onClose }) {
         if (e.target === e.currentTarget) onClose?.();
       }}
     >
-      <aside className="drawer" role="dialog" aria-modal="true" aria-label="Shopping cart">
+      <aside
+        ref={drawerRef}
+        className="drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Shopping cart"
+        tabIndex={-1}
+      >
         <div className="drawerHeader">
           <h2 className="drawerTitle">Your Cart</h2>
           <Button
@@ -83,8 +94,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                   <div>
                     <p className="cartItemTitle">{product.name}</p>
                     <p className="cartItemSub">
-                      {formatInr(eachInr)} each{" "}
-                      <span className="priceSecondary">({formatUsd(eachUsd)} USD)</span>
+                      {formatInr(eachInr)} each <span className="priceSecondary">({formatUsd(eachUsd)} USD)</span>
                     </p>
 
                     <div className="qtyRow" aria-label={`Quantity controls for ${product.name}`}>
@@ -92,7 +102,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                         className="qtyBtn"
                         type="button"
                         onClick={() => decrement(product.id)}
-                        aria-label="Decrease quantity"
+                        aria-label={`Decrease quantity for ${product.name}`}
                       >
                         −
                       </button>
@@ -103,7 +113,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                         className="qtyBtn"
                         type="button"
                         onClick={() => increment(product.id)}
-                        aria-label="Increase quantity"
+                        aria-label={`Increase quantity for ${product.name}`}
                       >
                         +
                       </button>
@@ -116,7 +126,12 @@ export default function CartDrawer({ isOpen, onClose }) {
                       <div className="priceSecondary">({formatUsd(lineUsd)} USD)</div>
                     </div>
 
-                    <Button variant="ghost" type="button" onClick={() => removeItem(product.id)}>
+                    <Button
+                      variant="ghost"
+                      type="button"
+                      onClick={() => removeItem(product.id)}
+                      aria-label={`Remove ${product.name} from cart`}
+                    >
                       Remove
                     </Button>
                   </div>
@@ -127,11 +142,15 @@ export default function CartDrawer({ isOpen, onClose }) {
         </div>
 
         <div className="drawerFooter">
-          <div className="totalRow">
-            <span>Subtotal</span>
+          <div className="totalRow" aria-label="Cart total">
+            <span>Total</span>
             <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", lineHeight: 1.1 }}>
-              <span className="totalPrimary">{formatInr(subtotalInr)}</span>
-              <span className="totalSecondary">({formatUsd(subtotal)} USD)</span>
+              <span className="totalPrimary" aria-label={`Total in INR ${formatInr(subtotalInr)}`}>
+                {formatInr(subtotalInr)}
+              </span>
+              <span className="totalSecondary" aria-label={`Total in USD ${formatUsd(subtotal)} USD`}>
+                ({formatUsd(subtotal)} USD)
+              </span>
             </span>
           </div>
 
@@ -140,17 +159,28 @@ export default function CartDrawer({ isOpen, onClose }) {
               variant="primary"
               type="button"
               onClick={() => {
-                if (cartItems.length === 0) return;
-                window.alert("Checkout is not implemented yet (mock UI).");
+                if (!hasItems) return;
+                window.alert("Order placement is not implemented yet (mock UI).");
               }}
-              disabled={cartItems.length === 0}
+              disabled={!hasItems}
+              aria-label="Place order"
             >
-              Checkout
+              Order
             </Button>
-            <Button variant="ghost" type="button" onClick={clear} disabled={cartItems.length === 0}>
+            <Button
+              variant="ghost"
+              type="button"
+              onClick={clear}
+              disabled={!hasItems}
+              aria-label="Clear cart"
+            >
               Clear
             </Button>
           </div>
+
+          <p className="p" style={{ fontSize: 12, marginTop: 10 }}>
+            Taxes & delivery fees (if any) are calculated at checkout. (Mock)
+          </p>
         </div>
       </aside>
     </div>
