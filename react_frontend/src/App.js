@@ -1,48 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useMemo, useState } from "react";
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import "./App.css";
 
-// PUBLIC_INTERFACE
-function App() {
-  const [theme, setTheme] = useState('light');
+import { CartProvider, useCart } from "./context/CartContext";
 
-  // Effect to apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
+import Navbar from "./components/Navbar";
+import CartDrawer from "./components/CartDrawer";
+import Footer from "./components/Footer";
 
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+import HomePage from "./pages/HomePage";
+import ProductsPage from "./pages/ProductsPage";
+import OrderTrackingPage from "./pages/OrderTrackingPage";
+
+/**
+ * Internal shell that needs router hooks (location/navigate).
+ */
+function AppShell() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [navQuery, setNavQuery] = useState("");
+
+  const activePath = location.pathname;
+
+  const title = useMemo(() => {
+    if (activePath === "/") return "Home";
+    if (activePath === "/products") return "Products";
+    if (activePath === "/track") return "Order Tracking";
+    return "MedExpress";
+  }, [activePath]);
+
+  const handleSearch = (query) => {
+    setNavQuery(query);
+
+    // If user searches from anywhere, route to products and apply query.
+    if (activePath !== "/products") {
+      navigate("/products");
+    }
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="appRoot">
+      <a className="skipLink" href="#main">
+        Skip to content
+      </a>
+
+      <Navbar
+        currentPath={activePath}
+        onOpenCart={() => setIsCartOpen(true)}
+        onSearch={handleSearch}
+        title={title}
+      />
+
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+
+      <main id="main" className="appMain" role="main">
+        <Routes>
+          <Route path="/" element={<HomePage onCtaBrowse={() => navigate("/products")} />} />
+          <Route path="/products" element={<ProductsPage externalQuery={navQuery} />} />
+          <Route path="/track" element={<OrderTrackingPage />} />
+          <Route path="/home" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+
+      <Footer />
     </div>
+  );
+}
+
+// PUBLIC_INTERFACE
+function App() {
+  /**
+   * Main application entry with providers.
+   * Routing is handled client-side with react-router-dom.
+   */
+  return (
+    <BrowserRouter>
+      <CartProvider>
+        <AppShell />
+      </CartProvider>
+    </BrowserRouter>
   );
 }
 
