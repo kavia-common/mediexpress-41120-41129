@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <defs>
+    <linearGradient id="bg-ibu" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="rgba(37,99,235,0.12)"/>
+      <stop offset="1" stop-color="rgba(249,250,251,1)"/>
+    </linearGradient>
+    <linearGradient id="pill-ibu" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="rgba(37,99,235,0.95)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0.26)"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="720" height="480" rx="34" fill="url(#bg-ibu)"/>
+
+  <!-- soft tablet -->
+  <g transform="translate(0,0)">
+    <rect x="236" y="156" width="248" height="144" rx="72" fill="url(#pill-ibu)"/>
+    <rect x="260" y="180" width="200" height="12" rx="6" fill="rgba(255,255,255,0.20)"/>
+    <rect x="260" y="206" width="160" height="10" rx="5" fill="rgba(255,255,255,0.16)"/>
+    <line x1="360" y1="176" x2="360" y2="280" stroke="rgba(245,158,11,0.55)" stroke-width="7"/>
+  </g>
+
+  <g font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" fill="rgba(17,24,39,0.82)">
+    <text x="50%" y="392" text-anchor="middle" font-size="26" font-weight="800" letter-spacing="-0.01em">Ibuprofen</text>
+    <text x="50%" y="422" text-anchor="middle" font-size="14" font-weight="600" opacity="0.9">200mg • tablets</text>
+  </g>
+</svg>

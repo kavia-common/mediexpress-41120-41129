@@ -1,7 +1,7 @@
 /**
  * Mock medicines data for MedExpress.
  *
- * This file now supports local assets via an `image` field (preferred).
+ * This file supports local assets via an `image` field (preferred).
  * We also keep `imageUrl` for backward compatibility, but UI components should
  * prefer `image` and fall back safely.
  */
@@ -9,6 +9,13 @@
 import paracetamolImg from "../assets/paracetamol.svg";
 import amoxicillinImg from "../assets/amoxicillin.svg";
 import genericMedicineImg from "../assets/generic-medicine.svg";
+
+import ibuprofenImg from "../assets/ibuprofen.svg";
+import cetirizineImg from "../assets/cetirizine.svg";
+import omeprazoleImg from "../assets/omeprazole.svg";
+import vitaminCImg from "../assets/vitamin-c.svg";
+import orsImg from "../assets/ors.svg";
+import antacidImg from "../assets/antacid.svg";
 
 export const FALLBACK_MEDICINE_IMAGE = genericMedicineImg;
 
@@ -30,8 +37,8 @@ export const medicines = [
     id: "mx-ibu-200",
     name: "Ibuprofen 200mg",
     description: "Pain & inflammation relief. 10 tablets.",
-    image: genericMedicineImg,
-    imageUrl: genericMedicineImg,
+    image: ibuprofenImg,
+    imageUrl: ibuprofenImg,
     price: 3.49,
     availability: "In Stock",
     featured: true
@@ -40,8 +47,8 @@ export const medicines = [
     id: "mx-cetz-10",
     name: "Cetirizine 10mg",
     description: "Allergy relief for sneezing and runny nose. 10 tablets.",
-    image: genericMedicineImg,
-    imageUrl: genericMedicineImg,
+    image: cetirizineImg,
+    imageUrl: cetirizineImg,
     price: 4.25,
     availability: "Limited",
     featured: false
@@ -50,8 +57,8 @@ export const medicines = [
     id: "mx-omz-20",
     name: "Omeprazole 20mg",
     description: "Acidity & heartburn support. 10 capsules.",
-    image: genericMedicineImg,
-    imageUrl: genericMedicineImg,
+    image: omeprazoleImg,
+    imageUrl: omeprazoleImg,
     price: 6.99,
     availability: "In Stock",
     featured: false
@@ -60,8 +67,8 @@ export const medicines = [
     id: "mx-vita-c",
     name: "Vitamin C 1000mg",
     description: "Daily immunity support. 15 tablets.",
-    image: genericMedicineImg,
-    imageUrl: genericMedicineImg,
+    image: vitaminCImg,
+    imageUrl: vitaminCImg,
     price: 8.5,
     availability: "In Stock",
     featured: true
@@ -80,8 +87,8 @@ export const medicines = [
     id: "mx-orf-oral",
     name: "ORS Hydration Pack",
     description: "Electrolyte hydration salts. 5 sachets.",
-    image: genericMedicineImg,
-    imageUrl: genericMedicineImg,
+    image: orsImg,
+    imageUrl: orsImg,
     price: 5.25,
     availability: "In Stock",
     featured: false
@@ -90,8 +97,8 @@ export const medicines = [
     id: "mx-antacid",
     name: "Antacid Chewables",
     description: "Quick heartburn relief. 12 chewables.",
-    image: genericMedicineImg,
-    imageUrl: genericMedicineImg,
+    image: antacidImg,
+    imageUrl: antacidImg,
     price: 4.75,
     availability: "Limited",
     featured: true

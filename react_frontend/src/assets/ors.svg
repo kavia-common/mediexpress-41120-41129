@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480" viewBox="0 0 720 480">
+  <defs>
+    <linearGradient id="bg-ors" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="rgba(37,99,235,0.12)"/>
+      <stop offset="1" stop-color="rgba(249,250,251,1)"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="720" height="480" rx="34" fill="url(#bg-ors)"/>
+
+  <!-- sachet + droplet -->
+  <g transform="translate(0,0)">
+    <path d="M260 136h200l-20 220H280l-20-220Z" fill="rgba(255,255,255,0.72)" stroke="rgba(17,24,39,0.10)" stroke-width="2"/>
+    <rect x="282" y="178" width="156" height="44" rx="20" fill="rgba(245,158,11,0.16)" stroke="rgba(245,158,11,0.22)" stroke-width="2"/>
+    <path d="M360 238c26 34 40 58 40 80c0 22-18 40-40 40s-40-18-40-40c0-22 14-46 40-80Z" fill="rgba(37,99,235,0.28)"/>
+    <path d="M376 302c0 10-8 18-18 18" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="6" stroke-linecap="round"/>
+  </g>
+
+  <g font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" fill="rgba(17,24,39,0.82)">
+    <text x="50%" y="392" text-anchor="middle" font-size="26" font-weight="800" letter-spacing="-0.01em">ORS</text>
+    <text x="50%" y="422" text-anchor="middle" font-size="14" font-weight="600" opacity="0.9">hydration • sachets</text>
+  </g>
+</svg>
