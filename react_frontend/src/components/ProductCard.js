@@ -44,9 +44,6 @@ export default function ProductCard({ product }) {
             // If a specific image fails, fall back to our clean generic placeholder.
             if (imgSrc !== FALLBACK_MEDICINE_IMAGE) setImgSrc(FALLBACK_MEDICINE_IMAGE);
           }}
-          style={{
-            borderRadius: 14
-          }}
         />
       </div>
 
@@ -61,9 +58,7 @@ export default function ProductCard({ product }) {
         <div className="cardMetaRow">
           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
             <div className="price">{formatInr(inrPrice)}</div>
-            <div className="p" style={{ fontSize: 12 }}>
-              ({formatUsd(usdPrice)} USD)
-            </div>
+            <div className="priceSecondary">({formatUsd(usdPrice)} USD)</div>
           </div>
 
           <Button

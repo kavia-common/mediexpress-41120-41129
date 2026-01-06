@@ -83,7 +83,8 @@ export default function CartDrawer({ isOpen, onClose }) {
                   <div>
                     <p className="cartItemTitle">{product.name}</p>
                     <p className="cartItemSub">
-                      {formatInr(eachInr)} each <span style={{ opacity: 0.75 }}>({formatUsd(product.price)} USD)</span>
+                      {formatInr(eachInr)} each{" "}
+                      <span className="priceSecondary">({formatUsd(eachUsd)} USD)</span>
                     </p>
 
                     <div className="qtyRow" aria-label={`Quantity controls for ${product.name}`}>
@@ -112,9 +113,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", lineHeight: 1.15 }}>
                       <div className="price">{formatInr(lineInr)}</div>
-                      <div className="p" style={{ fontSize: 12 }}>
-                        ({formatUsd(lineUsd)} USD)
-                      </div>
+                      <div className="priceSecondary">({formatUsd(lineUsd)} USD)</div>
                     </div>
 
                     <Button variant="ghost" type="button" onClick={() => removeItem(product.id)}>
@@ -131,33 +130,24 @@ export default function CartDrawer({ isOpen, onClose }) {
           <div className="totalRow">
             <span>Subtotal</span>
             <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", lineHeight: 1.1 }}>
-              <span>{formatInr(subtotalInr)}</span>
-              <span className="p" style={{ fontSize: 12 }}>
-                ({formatUsd(subtotal)} USD)
-              </span>
+              <span className="totalPrimary">{formatInr(subtotalInr)}</span>
+              <span className="totalSecondary">({formatUsd(subtotal)} USD)</span>
             </span>
           </div>
 
-          <div style={{ display: "flex", gap: 10 }}>
+          <div className="drawerCtas">
             <Button
-              variant="secondary"
+              variant="primary"
               type="button"
               onClick={() => {
                 if (cartItems.length === 0) return;
                 window.alert("Checkout is not implemented yet (mock UI).");
               }}
-              style={{ flex: 1, justifyContent: "center" }}
               disabled={cartItems.length === 0}
             >
               Checkout
             </Button>
-            <Button
-              variant="ghost"
-              type="button"
-              onClick={clear}
-              disabled={cartItems.length === 0}
-              style={{ justifyContent: "center" }}
-            >
+            <Button variant="ghost" type="button" onClick={clear} disabled={cartItems.length === 0}>
               Clear
             </Button>
           </div>

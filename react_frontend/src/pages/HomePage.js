@@ -16,7 +16,7 @@ export default function HomePage({ onCtaBrowse }) {
     <>
       <section className="section">
         <div className="container">
-          <div className="surface gradientHero" style={{ padding: 22 }}>
+          <div className="surface gradientHero" style={{ padding: 24 }}>
             <div className="grid" style={{ gridTemplateColumns: "1.2fr 0.8fr", gap: 18, alignItems: "center" }}>
               <div>
                 <h1 className="h1">Order medicines online. Delivered in minutes.</h1>
@@ -25,7 +25,7 @@ export default function HomePage({ onCtaBrowse }) {
                   modern experience. (Mock UI)
                 </p>
 
-                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 16 }}>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 18 }}>
                   <Button variant="primary" type="button" onClick={onCtaBrowse}>
                     Browse products
                   </Button>
@@ -45,11 +45,11 @@ export default function HomePage({ onCtaBrowse }) {
                 </div>
               </div>
 
-              <div className="surface" style={{ padding: 16, borderRadius: 18 }}>
-                <div className="h2" style={{ marginBottom: 8 }}>Today’s highlights</div>
-                <p className="p">
-                  Featured picks based on availability and common needs.
-                </p>
+              <div className="surface" style={{ padding: 16, borderRadius: 18, boxShadow: "var(--mx-shadow-sm)" }}>
+                <div className="h2" style={{ marginBottom: 8 }}>
+                  Today’s highlights
+                </div>
+                <p className="p">Featured picks based on availability and common needs.</p>
 
                 <div style={{ marginTop: 12, display: "grid", gap: 10 }}>
                   {featured.slice(0, 3).map((m) => {
@@ -64,16 +64,15 @@ export default function HomePage({ onCtaBrowse }) {
                           gap: 10,
                           padding: 12,
                           borderRadius: 16,
-                          border: "1px solid var(--mx-border)",
-                          background: "rgba(17,24,39,0.02)"
+                          border: "1px solid rgba(17,24,39,0.10)",
+                          background: "rgba(255,255,255,0.70)",
+                          boxShadow: "0 10px 18px rgba(17,24,39,0.06)"
                         }}
                       >
                         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                          <strong style={{ fontSize: 14 }}>{m.name}</strong>
-                          <span style={{ fontWeight: 850 }}>{formatInr(inr)}</span>
-                          <span className="p" style={{ fontSize: 12 }}>
-                            ({formatUsd(m.price)} USD)
-                          </span>
+                          <strong style={{ fontSize: 14, letterSpacing: "-0.01em" }}>{m.name}</strong>
+                          <span className="price">{formatInr(inr)}</span>
+                          <span className="priceSecondary">({formatUsd(m.price)} USD)</span>
                         </div>
                         <span className="badge">Featured</span>
                       </div>
