@@ -28,7 +28,7 @@ export const medicines = [
     name: "Paracetamol 500mg",
     description: "Fast relief from fever & mild pain. 10 tablets.",
     imageUrl: pillSvg("Paracetamol 500mg"),
-    price: 2.99,
+    price: 300,
     availability: "In Stock",
     featured: true
   },
