@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { medicines } from "../data/medicines";
 import ProductCard from "../components/ProductCard";
 import Button from "../components/Button";
+import CurrencyConverter from "../components/CurrencyConverter";
 
 // PUBLIC_INTERFACE
 export default function HomePage({ onCtaBrowse }) {
@@ -79,6 +80,8 @@ export default function HomePage({ onCtaBrowse }) {
           </div>
         </div>
       </section>
+
+      <CurrencyConverter defaultRate={83.0} />
 
       <section className="section">
         <div className="container">
