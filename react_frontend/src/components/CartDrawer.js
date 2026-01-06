@@ -1,12 +1,17 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useCart } from "../context/CartContext";
 import Button from "./Button";
+import { useCurrency } from "../context/CurrencyContext";
+import { formatInr, formatUsd, usdToInr } from "../utils/currency";
 
 // PUBLIC_INTERFACE
 export default function CartDrawer({ isOpen, onClose }) {
   /** Cart sidebar/drawer accessible globally. */
   const { cartItems, subtotal, increment, decrement, removeItem, clear } = useCart();
+  const { rate } = useCurrency();
   const closeBtnRef = useRef(null);
+
+  const subtotalInr = useMemo(() => usdToInr(subtotal, rate), [subtotal, rate]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -30,12 +35,7 @@ export default function CartDrawer({ isOpen, onClose }) {
         if (e.target === e.currentTarget) onClose?.();
       }}
     >
-      <aside
-        className="drawer"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Shopping cart"
-      >
+      <aside className="drawer" role="dialog" aria-modal="true" aria-label="Shopping cart">
         <div className="drawerHeader">
           <h2 className="drawerTitle">Your Cart</h2>
           <Button
@@ -56,49 +56,76 @@ export default function CartDrawer({ isOpen, onClose }) {
               <p className="p" style={{ marginBottom: 10 }}>
                 Your cart is empty. Add a medicine to get started.
               </p>
-              <div className="p">
-                Tip: Use the search bar to quickly find items.
-              </div>
+              <div className="p">Tip: Use the search bar to quickly find items.</div>
             </div>
           ) : (
-            cartItems.map(({ product, qty }) => (
-              <div className="cartItem" key={product.id}>
-                <div className="cartThumb">
-                  <img src={product.imageUrl} alt={product.name} />
-                </div>
+            cartItems.map(({ product, qty }) => {
+              const lineUsd = product.price * qty;
+              const lineInr = usdToInr(lineUsd, rate);
+              const eachInr = usdToInr(product.price, rate);
 
-                <div>
-                  <p className="cartItemTitle">{product.name}</p>
-                  <p className="cartItemSub">${product.price.toFixed(2)} each</p>
+              return (
+                <div className="cartItem" key={product.id}>
+                  <div className="cartThumb">
+                    <img src={product.imageUrl} alt={product.name} />
+                  </div>
 
-                  <div className="qtyRow" aria-label={`Quantity controls for ${product.name}`}>
-                    <button className="qtyBtn" type="button" onClick={() => decrement(product.id)} aria-label="Decrease quantity">
-                      −
-                    </button>
-                    <span className="qtyVal" aria-label={`Quantity ${qty}`}>
-                      {qty}
-                    </span>
-                    <button className="qtyBtn" type="button" onClick={() => increment(product.id)} aria-label="Increase quantity">
-                      +
-                    </button>
+                  <div>
+                    <p className="cartItemTitle">{product.name}</p>
+                    <p className="cartItemSub">
+                      {formatInr(eachInr)} each <span style={{ opacity: 0.75 }}>({formatUsd(product.price)} USD)</span>
+                    </p>
+
+                    <div className="qtyRow" aria-label={`Quantity controls for ${product.name}`}>
+                      <button
+                        className="qtyBtn"
+                        type="button"
+                        onClick={() => decrement(product.id)}
+                        aria-label="Decrease quantity"
+                      >
+                        −
+                      </button>
+                      <span className="qtyVal" aria-label={`Quantity ${qty}`}>
+                        {qty}
+                      </span>
+                      <button
+                        className="qtyBtn"
+                        type="button"
+                        onClick={() => increment(product.id)}
+                        aria-label="Increase quantity"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", lineHeight: 1.15 }}>
+                      <div className="price">{formatInr(lineInr)}</div>
+                      <div className="p" style={{ fontSize: 12 }}>
+                        ({formatUsd(lineUsd)} USD)
+                      </div>
+                    </div>
+
+                    <Button variant="ghost" type="button" onClick={() => removeItem(product.id)}>
+                      Remove
+                    </Button>
                   </div>
                 </div>
-
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
-                  <div className="price">${(product.price * qty).toFixed(2)}</div>
-                  <Button variant="ghost" type="button" onClick={() => removeItem(product.id)}>
-                    Remove
-                  </Button>
-                </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 
         <div className="drawerFooter">
           <div className="totalRow">
             <span>Subtotal</span>
-            <span>${subtotal.toFixed(2)}</span>
+            <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", lineHeight: 1.1 }}>
+              <span>{formatInr(subtotalInr)}</span>
+              <span className="p" style={{ fontSize: 12 }}>
+                ({formatUsd(subtotal)} USD)
+              </span>
+            </span>
           </div>
 
           <div style={{ display: "flex", gap: 10 }}>

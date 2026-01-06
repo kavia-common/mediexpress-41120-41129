@@ -2,7 +2,8 @@ import React, { useMemo, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
 
-import { CartProvider, useCart } from "./context/CartContext";
+import { CartProvider } from "./context/CartContext";
+import { CurrencyProvider } from "./context/CurrencyContext";
 
 import Navbar from "./components/Navbar";
 import CartDrawer from "./components/CartDrawer";
@@ -78,9 +79,11 @@ function App() {
    */
   return (
     <BrowserRouter>
-      <CartProvider>
-        <AppShell />
-      </CartProvider>
+      <CurrencyProvider>
+        <CartProvider>
+          <AppShell />
+        </CartProvider>
+      </CurrencyProvider>
     </BrowserRouter>
   );
 }

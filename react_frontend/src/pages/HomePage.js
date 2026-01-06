@@ -3,11 +3,14 @@ import { medicines } from "../data/medicines";
 import ProductCard from "../components/ProductCard";
 import Button from "../components/Button";
 import CurrencyConverter from "../components/CurrencyConverter";
+import { useCurrency } from "../context/CurrencyContext";
+import { formatInr, formatUsd, usdToInr } from "../utils/currency";
 
 // PUBLIC_INTERFACE
 export default function HomePage({ onCtaBrowse }) {
   /** Homepage with hero, featured medicines and quick value props. */
   const featured = useMemo(() => medicines.filter((m) => m.featured).slice(0, 4), []);
+  const { rate, setRate } = useCurrency();
 
   return (
     <>
@@ -26,7 +29,11 @@ export default function HomePage({ onCtaBrowse }) {
                   <Button variant="primary" type="button" onClick={onCtaBrowse}>
                     Browse products
                   </Button>
-                  <Button variant="secondary" type="button" onClick={() => window.alert("Upload prescription not implemented yet.")}>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={() => window.alert("Upload prescription not implemented yet.")}
+                  >
                     Upload prescription
                   </Button>
                 </div>
@@ -45,27 +52,33 @@ export default function HomePage({ onCtaBrowse }) {
                 </p>
 
                 <div style={{ marginTop: 12, display: "grid", gap: 10 }}>
-                  {featured.slice(0, 3).map((m) => (
-                    <div
-                      key={m.id}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        gap: 10,
-                        padding: 12,
-                        borderRadius: 16,
-                        border: "1px solid var(--mx-border)",
-                        background: "rgba(17,24,39,0.02)"
-                      }}
-                    >
-                      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                        <strong style={{ fontSize: 14 }}>{m.name}</strong>
-                        <span className="p" style={{ fontSize: 12 }}>${m.price.toFixed(2)}</span>
+                  {featured.slice(0, 3).map((m) => {
+                    const inr = usdToInr(m.price, rate);
+                    return (
+                      <div
+                        key={m.id}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          gap: 10,
+                          padding: 12,
+                          borderRadius: 16,
+                          border: "1px solid var(--mx-border)",
+                          background: "rgba(17,24,39,0.02)"
+                        }}
+                      >
+                        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                          <strong style={{ fontSize: 14 }}>{m.name}</strong>
+                          <span style={{ fontWeight: 850 }}>{formatInr(inr)}</span>
+                          <span className="p" style={{ fontSize: 12 }}>
+                            ({formatUsd(m.price)} USD)
+                          </span>
+                        </div>
+                        <span className="badge">Featured</span>
                       </div>
-                      <span className="badge">Featured</span>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -81,7 +94,7 @@ export default function HomePage({ onCtaBrowse }) {
         </div>
       </section>
 
-      <CurrencyConverter defaultRate={83.0} />
+      <CurrencyConverter title="USD → INR Rate" valueRate={rate} onRateChange={setRate} />
 
       <section className="section">
         <div className="container">

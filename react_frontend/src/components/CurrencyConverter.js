@@ -3,11 +3,24 @@ import React, { useMemo, useState } from "react";
 // PUBLIC_INTERFACE
 export default function CurrencyConverter({
   defaultRate = 83.0,
-  title = "USD → INR Converter"
+  title = "USD → INR Converter",
+  valueRate,
+  onRateChange
 }) {
-  /** Simple USD to INR converter with a configurable (static) exchange rate. */
+  /**
+   * Simple USD to INR converter.
+   * Can be used in uncontrolled mode (internal rate state) or controlled mode (valueRate/onRateChange)
+   * so the Home page can drive the global app rate.
+   */
   const [usd, setUsd] = useState("");
-  const [rate, setRate] = useState(String(defaultRate));
+  const [internalRate, setInternalRate] = useState(String(defaultRate));
+
+  const rateValue = valueRate == null ? internalRate : String(valueRate);
+
+  const setRateValue = (next) => {
+    if (valueRate == null) setInternalRate(next);
+    onRateChange?.(next === "" ? "" : Number(next));
+  };
 
   const parsedUsd = useMemo(() => {
     // Empty string should not show an error; treat it as "no input".
@@ -21,11 +34,11 @@ export default function CurrencyConverter({
   }, [usd]);
 
   const parsedRate = useMemo(() => {
-    const n = Number(rate);
+    const n = Number(rateValue);
     if (!Number.isFinite(n)) return { kind: "invalid" };
     if (n <= 0) return { kind: "invalid" };
     return { kind: "valid", value: n };
-  }, [rate]);
+  }, [rateValue]);
 
   const inrValue = useMemo(() => {
     if (parsedUsd.kind !== "valid") return null;
@@ -48,9 +61,11 @@ export default function CurrencyConverter({
           <div className="sectionTitleRow" style={{ marginBottom: 12 }}>
             <div>
               <h2 className="h2">{title}</h2>
-              <p className="p">Convert USD to INR using a static rate (editable below).</p>
+              <p className="p">
+                Prices across the app use this exchange rate. You can tweak it here to see live updates.
+              </p>
             </div>
-            <span className="badge badgeSuccess">Static rate</span>
+            <span className="badge badgeSuccess">Rate control</span>
           </div>
 
           <div
@@ -116,11 +131,11 @@ export default function CurrencyConverter({
                     Exchange rate (INR per 1 USD)
                   </span>
                   <input
-                    value={rate}
-                    onChange={(e) => setRate(e.target.value)}
+                    value={rateValue}
+                    onChange={(e) => setRateValue(e.target.value)}
                     inputMode="decimal"
                     type="text"
-                    placeholder="e.g., 83.0"
+                    placeholder="e.g., 83.5"
                     style={{
                       width: "100%",
                       padding: "10px 12px",
@@ -137,7 +152,7 @@ export default function CurrencyConverter({
                     </span>
                   ) : (
                     <span className="p" style={{ fontSize: 12 }}>
-                      This is a static value for now—can be wired to live rates later.
+                      Used instantly across listings and cart totals.
                     </span>
                   )}
                 </label>

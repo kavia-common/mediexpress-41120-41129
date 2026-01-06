@@ -2,11 +2,15 @@ import React from "react";
 import Badge from "./Badge";
 import Button from "./Button";
 import { useCart } from "../context/CartContext";
+import { useCurrency } from "../context/CurrencyContext";
+import { formatInr, formatUsd, usdToInr } from "../utils/currency";
 
 // PUBLIC_INTERFACE
 export default function ProductCard({ product }) {
   /** Product listing card with image, description, availability, and add-to-cart. */
   const { addItem } = useCart();
+  const { rate } = useCurrency();
+
   const isAvailable = product.availability !== "Out of Stock";
 
   const badgeTone =
@@ -15,6 +19,8 @@ export default function ProductCard({ product }) {
       : product.availability === "Out of Stock"
         ? "error"
         : "neutral";
+
+  const inrPrice = usdToInr(product.price, rate);
 
   return (
     <article className="card">
@@ -31,7 +37,13 @@ export default function ProductCard({ product }) {
         <p className="cardDesc">{product.description}</p>
 
         <div className="cardMetaRow">
-          <div className="price">${product.price.toFixed(2)}</div>
+          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
+            <div className="price">{formatInr(inrPrice)}</div>
+            <div className="p" style={{ fontSize: 12 }}>
+              ({formatUsd(product.price)} USD)
+            </div>
+          </div>
+
           <Button
             variant={isAvailable ? "primary" : "ghost"}
             type="button"
