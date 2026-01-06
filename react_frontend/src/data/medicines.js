@@ -1,5 +1,5 @@
 /**
- * Mock medicines data for MedExpress.
+ * Mock medicines data for Jashmedicine.
  *
  * This file supports local assets via an `image` field (preferred).
  * We also keep `imageUrl` for backward compatibility, but UI components should

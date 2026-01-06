@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 
-test("renders MedExpress navbar", () => {
+test("renders Jashmedicine navbar", () => {
   render(<App />);
-  const brand = screen.getByText(/MedExpress/i);
+  const brand = screen.getByText(/Jashmedicine/i);
   expect(brand).toBeInTheDocument();
 });

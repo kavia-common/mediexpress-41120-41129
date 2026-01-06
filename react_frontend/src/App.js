@@ -29,7 +29,7 @@ function AppShell() {
     if (activePath === "/") return "Home";
     if (activePath === "/products") return "Products";
     if (activePath === "/track") return "Order Tracking";
-    return "MedExpress";
+    return "Jashmedicine";
   }, [activePath]);
 
   const handleSearch = (query) => {

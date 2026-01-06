@@ -191,7 +191,7 @@ export default function OrderTrackingPage() {
                 <div className="surface" style={{ padding: 12, borderRadius: 16, marginTop: 14 }}>
                   <strong style={{ display: "block" }}>Delivered</strong>
                   <p className="p" style={{ margin: "4px 0 0" }}>
-                    Thanks for ordering with MedExpress. (Mock)
+                    Thanks for ordering with Jashmedicine. (Mock)
                   </p>
                 </div>
               ) : null}

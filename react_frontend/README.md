@@ -1,4 +1,4 @@
-# MedExpress (React Frontend)
+# Jashmedicine (React Frontend)
 
 A lightweight, client-side React app (no backend) for browsing medicines, managing a cart, and tracking an order with a mocked timeline.
 

@@ -21,7 +21,7 @@ export default function HomePage({ onCtaBrowse, onAddToCartOpenDrawer }) {
               <div>
                 <h1 className="h1">Order medicines online. Delivered in minutes.</h1>
                 <p className="p" style={{ marginTop: 10, maxWidth: 640 }}>
-                  MedExpress brings your essentials—pain relief, allergy support, hydration—right to your door with a clean,
+                  Jashmedicine brings your essentials—pain relief, allergy support, hydration—right to your door with a clean,
                   modern experience. (Mock UI)
                 </p>
 

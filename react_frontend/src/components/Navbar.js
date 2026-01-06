@@ -14,10 +14,10 @@ export default function Navbar({ currentPath, onOpenCart, onSearch }) {
   return (
     <header className="navbar" role="banner">
       <div className="container navbarInner">
-        <Link to="/" className="brand" aria-label="MedExpress Home">
+        <Link to="/" className="brand" aria-label="Jashmedicine Home">
           <div className="brandMark" aria-hidden="true" />
           <div className="brandText">
-            <div className="brandName">MedExpress</div>
+            <div className="brandName">Jashmedicine</div>
             <div className="brandTagline">Pharmacy delivery, fast</div>
           </div>
         </Link>
