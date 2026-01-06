@@ -4,6 +4,7 @@ import Button from "./Button";
 import { useCurrency } from "../context/CurrencyContext";
 import { formatInr, formatUsd, usdToInr } from "../utils/currency";
 import { getLinePrices } from "../utils/pricing";
+import { FALLBACK_MEDICINE_IMAGE } from "../data/medicines";
 
 // PUBLIC_INTERFACE
 export default function CartDrawer({ isOpen, onClose }) {
@@ -66,7 +67,17 @@ export default function CartDrawer({ isOpen, onClose }) {
               return (
                 <div className="cartItem" key={product.id}>
                   <div className="cartThumb">
-                    <img src={product.imageUrl} alt={product.name} />
+                    <img
+                      src={product.image || product.imageUrl || FALLBACK_MEDICINE_IMAGE}
+                      alt={product.name}
+                      loading="lazy"
+                      onError={(e) => {
+                        // Avoid infinite loops; only swap to fallback once.
+                        if (e.currentTarget.src !== FALLBACK_MEDICINE_IMAGE) {
+                          e.currentTarget.src = FALLBACK_MEDICINE_IMAGE;
+                        }
+                      }}
+                    />
                   </div>
 
                   <div>
